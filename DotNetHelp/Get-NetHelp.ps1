@@ -18,6 +18,13 @@ function Get-NetHelp {
     if ($Docs = Get-HelpLocation $Type) {
         $PSCmdlet.WriteVerbose("Found '$Docs'.")
 
+        $TypeName = $Type.FullName
+        if ($Method) {
+            $Selector = "M:$TypeName.$Method"
+        } else {  ## TODO:  Property?
+            $Selector = "T:$TypeName"
+        }
+
         ## get summary, if possible
         $Help = Import-LocalNetHelp $Docs $Selector
 

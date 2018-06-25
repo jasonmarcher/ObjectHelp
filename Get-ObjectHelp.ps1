@@ -90,14 +90,12 @@ function Get-ObjectHelp {
 
         if ($Type -is [Microsoft.Management.Infrastructure.CimClass]) {
             if ($Online) {
+                $TypeName = $Type.CimClassName
                 if ($Method) {
-                    $TypeName = $Type.CimClassName
                     $Suffix = "#methods"
                 } elseif ($Property) {
-                    $TypeName = $Type.CimClassName
                     $Suffix = "#properties"
                 } else {
-                    $TypeName = $Type.CimClassName
                     $Suffix = ""
                 }
                 $Uri = "http://msdn.microsoft.com/library/$Culture/wmisdk/wmi/$TypeName.asp$Suffix"
@@ -112,14 +110,6 @@ function Get-ObjectHelp {
                 }
             }
         } elseif ($Type -is [System.Type]) {
-            if ($Method) {
-                $TypeName = $Type.FullName
-                $Selector = "M:$TypeName.$Method"
-            } else {  ## TODO:  Property?
-                $TypeName = $Object.FullName
-                $Selector = "T:$TypeName"
-            }
-
             if ($Online) {
                 if ($Uri = Get-HelpUri $Type) {
                     [System.Diagnostics.Process]::Start($Uri.ToString()) > $null
