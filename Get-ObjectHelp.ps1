@@ -124,26 +124,21 @@ function Get-ObjectHelp {
                 }
             }
         } elseif ($Type -is [System.__ComObject]) {
-            foreach ($temptype in $Type.PSTypeNames) {
-                if ($temptype -match 'System\.__ComObject#(.*)$') {
-                    $Type = (Get-ItemProperty "HKLM:\SOFTWARE\Classes\Interface\$($Matches[1])").'(default)'
-                    ## TODO:  Types that start with "_" are most likely COM accessible .NET types
-                    if ('_Application' -contains $Type) {
-                        $TypeLib = (Get-ItemProperty "HKLM:\SOFTWARE\Classes\Interface\$($Matches[1])\TypeLib").'(default)'
-                        $Version = (Get-ItemProperty "HKLM:\SOFTWARE\Classes\Interface\$($Matches[1])\TypeLib").Version
-                        $TypeName = (Get-ItemProperty "HKLM:\SOFTWARE\Classes\TypeLib\$TypeLib\$Version").'(default)'
-                    } else {
-                        $TypeName = $Type
-                    }
-                    break
-                }
-            }
-
             if ($Online) {
+                if ($Type.PSTypeNames[0] -match 'System\.__ComObject#(.*)$') {
+                    if (Test-Path "HKLM:\SOFTWARE\Classes\Interface\$($Matches[1])") {
+                        $TypeKey = (Get-ItemProperty "HKLM:\SOFTWARE\Classes\Interface\$($Matches[1])").'(default)'
+                        if ('_Application' -contains $TypeKey) {
+                            $TypeName = (Get-ItemProperty "HKLM:\SOFTWARE\Classes\TypeLib\$TypeLib\$Version").'(default)'
+                        } else {
+                            $TypeName = $TypeKey
+                        }
+                    }
+                }
                 $Uri = "http://social.msdn.microsoft.com/Search/$Culture/?query=$TypeName"
                 [System.Diagnostics.Process]::Start($uri) > $null
             } else {
-                Write-Error "Unable to choose a documentation source."
+                Write-Error "Unable to find local help."
                 return
             }
         }
