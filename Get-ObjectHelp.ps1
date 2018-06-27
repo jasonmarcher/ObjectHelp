@@ -66,7 +66,7 @@ function Get-ObjectHelp {
                     }
                     break
                 }
-                '^Win32_[\w]+' {
+                '^(Win32|CIM)_[\w]+' {
                     $Type = Get-CimClass $Object
                 }
                 ## TODO: WMI / CIM
