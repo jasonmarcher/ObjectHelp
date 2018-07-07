@@ -90,15 +90,16 @@ function Get-ObjectHelp {
 
         if ($Type -is [Microsoft.Management.Infrastructure.CimClass]) {
             if ($Online) {
-                $TypeName = $Type.CimClassName
+                $TypeName = $Type.CimClassName -replace "_","-"
                 if ($Method) {
-                    $Suffix = "#methods"
+                    # $Page = "$TypeName#methods"
+                    $Page = "$Method-method-in-class-$TypeName"
                 } elseif ($Property) {
-                    $Suffix = "#properties"
+                    $Page = "$TypeName#properties"
                 } else {
-                    $Suffix = ""
+                    $Page = $TypeName
                 }
-                $Uri = "http://msdn.microsoft.com/library/$Culture/wmisdk/wmi/$TypeName.asp$Suffix"
+                $Uri = "https://docs.microsoft.com/$Culture/windows/desktop/CIMWin32Prov/$Page"
                 [System.Diagnostics.Process]::Start($uri) > $null
             } else {
                 if ($Method) {
