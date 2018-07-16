@@ -1,11 +1,4 @@
-﻿param([string[]]$PreCacheList)
-
-<#
-
-.ForwardHelpTargetName Get-Help
-.ForwardHelpCategory Cmdlet
-
-#>
+param([string[]]$PreCacheList)
 
 if ((!$SCRIPT:helpCache) -or $RefreshCache) {
     $SCRIPT:helpCache = @{}
@@ -66,110 +59,7 @@ function PreloadDocumentation
     }
 }
 
-# our proxy command generated from [proxycommand]::create((gcm get-help))
-# function Get-Help {
-#     [CmdletBinding(DefaultParameterSetName='AllUsersView')]
-#     param(
-#         [Parameter(Position=0, ValueFromPipelineByPropertyName=$true)]
-#         [System.String]
-#         ${Name},
-
-#         [System.String]
-#         ${Path},
-
-#         [System.String[]]
-#         ${Category},
-
-#         [System.String[]]
-#         ${Component},
-
-#         [System.String[]]
-#         ${Functionality},
-
-#         [System.String[]]
-#         ${Role},
-
-#         [Parameter(ParameterSetName='DetailedView')]
-#         [Switch]
-#         ${Detailed},
-
-#         [Parameter(ParameterSetName='AllUsersView')]
-#         [Switch]
-#         ${Full},
-
-#         [Parameter(ParameterSetName='Examples')]
-#         [Switch]
-#         ${Examples},
-
-#         [Parameter(ParameterSetName='Parameters')]
-#         [System.String]
-#         ${Parameter},
-        
-#         [Parameter(ParameterSetName='ObjectHelp', ValueFromPipeline = $true, Mandatory = $true)]
-#         [ValidateNotNullOrEmpty()]
-#         ${Object},
-
-#         [Parameter(ParameterSetName='ObjectHelp')]
-#         [String]
-#         ${Member},
-        
-#         [Parameter(ParameterSetName='ObjectHelp')]
-#         [Switch]
-#         ${Static},        
-
-#         [Switch]
-#         ${Online})
-
-#     begin
-#     {
-#         try {
-#             if ($PSCmdlet.ParameterSetName -eq "ObjectHelp") {                                
-                
-#                 $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Get-ObjectHelp', [System.Management.Automation.CommandTypes]::Function)
-#                 $scriptCmd = { & $wrappedCmd @PSBoundParameters }
-#                 $steppablePipeline = $scriptCmd.GetSteppablePipeline()
-            
-#             } else {
-            
-#                 $outBuffer = $null
-#                 if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer) -and $outBuffer -gt 1024)
-#                 {
-#                     $PSBoundParameters['OutBuffer'] = 1024
-#                 }
-#                 $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Get-Help', [System.Management.Automation.CommandTypes]::Cmdlet)
-#                 $scriptCmd = { & $wrappedCmd @PSBoundParameters }
-#                 $steppablePipeline = $scriptCmd.GetSteppablePipeline()
-                
-#             }
-#             $steppablePipeline.Begin($PSCmdlet)
-#         } catch {
-#             throw
-#         }
-#     }
-
-#     process
-#     {
-#         try {        
-#             $steppablePipeline.Process($_)
-#         } catch {
-#             throw
-#         }
-#     }
-
-#     end
-#     {
-#         try {
-#             $steppablePipeline.End()
-#         } catch {
-#             throw
-#         }
-#     }
-# }
-
-# PreloadDocumentation
-
-# Export-ModuleMember Get-Help
-Export-ModuleMember *-* -Alias *
+Export-ModuleMember Get-ObjectHelp -Alias *
 
 @"
     NAME
