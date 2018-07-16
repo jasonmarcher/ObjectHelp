@@ -15,127 +15,124 @@ function Get-NetHelp {
         [string]$Method
     )
 
-    if ($Docs = Get-HelpLocation $Type) {
-        $PSCmdlet.WriteVerbose("Found '$Docs'.")
+    # if ($Docs = Get-HelpLocation $Type) {
+    #     $PSCmdlet.WriteVerbose("Found '$Docs'.")
 
-        $TypeName = $Type.FullName
-        if ($Method) {
-            $Selector = "M:$TypeName.$Method"
-        } else {  ## TODO:  Property?
-            $Selector = "T:$TypeName"
+    #     $TypeName = $Type.FullName
+    #     if ($Method) {
+    #         $Selector = "M:$TypeName.$Method"
+    #     } else {  ## TODO:  Property?
+    #         $Selector = "T:$TypeName"
+    #     }
+
+    #     ## get summary, if possible
+    #     $Help = Import-LocalNetHelp $Docs $Selector
+
+    #     if ($Help) {
+    #         Write-Verbose $Help.OuterXml
+    #     }
+    # }
+
+    $HelpObject = New-Object PSObject -Property @{
+        Details = New-Object PSObject -Property @{
+            Name = $Type.Name
+            Namespace = $Type.Namespace
+            SuperClass = $Type.BaseType
         }
-
-        ## get summary, if possible
-        $Help = Import-LocalNetHelp $Docs $Selector
-
-        if ($Help) {
-            $Help #| Format-AssemblyHelp
-        } else {
-            Write-Host "While some local documentation was found, it was incomplete."
-        }
+        Properties = @{}
+        Constructors = @()
+        Methods = @{}
+        RelatedLinks = @(
+            New-Object PSObject -Property @{Title="Online Version"; Link = Get-HelpUri $Type}
+        )
+    }
+    $HelpObject.Details.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Details")
+    $HelpObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo")
+    if ($Detailed) {
+        $HelpObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#DetailedView")
     } else {
-        $HelpObject = New-Object PSObject -Property @{
-            Details = New-Object PSObject -Property @{
-                Name = $Type.Name
-                Namespace = $Type.Namespace
-                SuperClass = $Type.BaseType
-            }
-            Properties = @{}
-            Constructors = @()
-            Methods = @{}
-            RelatedLinks = @(
-                New-Object PSObject -Property @{Title="Online Version"; Link = Get-HelpUri $Type}
+        $HelpObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net")
+    }
+
+    foreach ($NetProperty in $Type.DeclaredProperties) {
+        $PropertyObject = New-Object PSObject -Property @{
+            Name = $NetProperty.Name
+            Type = $NetProperty.PropertyType
+        }
+        $PropertyObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#Property")
+        $HelpObject.Properties.Add($NetProperty.Name, $PropertyObject)
+    }
+
+    foreach ($NetConstructor in $Type.DeclaredConstructors | Where-Object {$_.IsPublic}) {
+        $ConstructorObject = New-Object PSObject -Property @{
+            Name = $Type.Name
+            Namespace = $Type.Namespace
+            Parameters = $NetConstructor.GetParameters()
+        }
+        $ConstructorObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#Constructor")
+        
+        $HelpObject.Constructors += $ConstructorObject
+    }
+
+    foreach ($NetMethod in $Type.DeclaredMethods | Where-Object {$_.IsPublic -and (-not $_.IsSpecialName)} | Group-Object Name) {
+        $MethodObject = New-Object PSObject -Property @{
+            Name = $NetMethod.Name
+            Static = $NetMethod.Group[0].IsStatic
+            Constructor = $NetMethod.Group[0].IsConstructor
+            ReturnType = $NetMethod.Group[0].ReturnType
+            Overloads = @(
+                $NetMethod.Group | ForEach-Object {
+                    $MethodOverload = New-Object PSObject -Property @{
+                        Name = $NetMethod.Name
+                        Static = $_.IsStatic
+                        ReturnType = $_.ReturnType
+                        Parameters = @(
+                            $_.GetParameters() | ForEach-Object {
+                                New-Object PSObject -Property @{
+                                    Name = $_.Name
+                                    ParameterType = $_.ParameterType
+                                }
+                            }
+                        )
+                        Class = $HelpObject.Details.Name
+                        Namespace = $HelpObject.Details.Namespace
+                    }
+                    $MethodOverload.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#MethodOverload")
+                    $MethodOverload
+                }
             )
         }
-        $HelpObject.Details.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Details")
-        $HelpObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo")
-        if ($Detailed) {
-            $HelpObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#DetailedView")
-            # Write-Error "Local detailed help not available for type '$Type'."
-        } else {
-            $HelpObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net")
-        }
+        $MethodObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#Method")
+        
+        $HelpObject.Methods.Add($NetMethod.Name, $MethodObject)
+    }
 
-        foreach ($NetProperty in $Type.DeclaredProperties) {
-            $PropertyObject = New-Object PSObject -Property @{
-                Name = $NetProperty.Name
-                Type = $NetProperty.PropertyType
-            }
-            $PropertyObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#Property")
-            $HelpObject.Properties.Add($NetProperty.Name, $PropertyObject)
-        }
+    if ($Property) {
+        $PropertyObject = $HelpObject.Properties[$Property]
 
-        foreach ($NetConstructor in $Type.DeclaredConstructors | Where-Object {$_.IsPublic}) {
-            $ConstructorObject = New-Object PSObject -Property @{
-                Name = $Type.Name
-                Namespace = $Type.Namespace
-                Parameters = $NetConstructor.GetParameters()
-            }
-            $ConstructorObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#Constructor")
-            
-            $HelpObject.Constructors += $ConstructorObject
-        }
-    
-        foreach ($NetMethod in $Type.DeclaredMethods | Where-Object {$_.IsPublic -and (-not $_.IsSpecialName)} | Group-Object Name) {
-            $MethodObject = New-Object PSObject -Property @{
-                Name = $NetMethod.Name
-                Static = $NetMethod.Group[0].IsStatic
-                Constructor = $NetMethod.Group[0].IsConstructor
-                ReturnType = $NetMethod.Group[0].ReturnType
-                Overloads = @(
-                    $NetMethod.Group | ForEach-Object {
-                        $MethodOverload = New-Object PSObject -Property @{
-                            Name = $NetMethod.Name
-                            Static = $_.IsStatic
-                            ReturnType = $_.ReturnType
-                            Parameters = @(
-                                $_.GetParameters() | ForEach-Object {
-                                    New-Object PSObject -Property @{
-                                        Name = $_.Name
-                                        ParameterType = $_.ParameterType
-                                    }
-                                }
-                            )
-                            Class = $HelpObject.Details.Name
-                            Namespace = $HelpObject.Details.Namespace
-                        }
-                        $MethodOverload.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#MethodOverload")
-                        $MethodOverload
-                    }
-                )
-            }
-            $MethodObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#Method")
-            
-            $HelpObject.Methods.Add($NetMethod.Name, $MethodObject)
-        }
-    
-        if ($Property) {
-            $PropertyObject = $HelpObject.Properties[$Property]
-    
-            if ($PropertyObject) {
-                Add-Member -InputObject $PropertyObject -Name Class -Value $HelpObject.Details.Name -MemberType NoteProperty
-                Add-Member -InputObject $PropertyObject -Name Namespace -Value $HelpObject.Details.Namespace -MemberType NoteProperty
-                Add-Member -InputObject $PropertyObject -Name SuperClass -Value $HelpObject.Details.SuperClass -MemberType NoteProperty
-                $PropertyObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#PropertyDetail")
-                return $PropertyObject
-            } else {
-                throw "Property named '$Property' not found."
-            }
-        } elseif ($Method) {
-            $MethodObject = $HelpObject.Methods[$Method]
-    
-            if ($MethodObject) {
-                Add-Member -InputObject $MethodObject -Name Class -Value $HelpObject.Details.Name -MemberType NoteProperty
-                Add-Member -InputObject $MethodObject -Name Namespace -Value $HelpObject.Details.Namespace -MemberType NoteProperty
-                Add-Member -InputObject $MethodObject -Name SuperClass -Value $HelpObject.Details.SuperClass -MemberType NoteProperty
-                $MethodObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#MethodDetail")
-    
-                return $MethodObject
-            } else {
-                throw "Method named '$Method' not found."
-            }
+        if ($PropertyObject) {
+            Add-Member -InputObject $PropertyObject -Name Class -Value $HelpObject.Details.Name -MemberType NoteProperty
+            Add-Member -InputObject $PropertyObject -Name Namespace -Value $HelpObject.Details.Namespace -MemberType NoteProperty
+            Add-Member -InputObject $PropertyObject -Name SuperClass -Value $HelpObject.Details.SuperClass -MemberType NoteProperty
+            $PropertyObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#PropertyDetail")
+            return $PropertyObject
         } else {
-            return $HelpObject
+            throw "Property named '$Property' not found."
         }
+    } elseif ($Method) {
+        $MethodObject = $HelpObject.Methods[$Method]
+
+        if ($MethodObject) {
+            Add-Member -InputObject $MethodObject -Name Class -Value $HelpObject.Details.Name -MemberType NoteProperty
+            Add-Member -InputObject $MethodObject -Name Namespace -Value $HelpObject.Details.Namespace -MemberType NoteProperty
+            Add-Member -InputObject $MethodObject -Name SuperClass -Value $HelpObject.Details.SuperClass -MemberType NoteProperty
+            $MethodObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#MethodDetail")
+
+            return $MethodObject
+        } else {
+            throw "Method named '$Method' not found."
+        }
+    } else {
+        return $HelpObject
     }
 }
