@@ -16,7 +16,7 @@
     CmdletsToExport    = ''
     FunctionsToExport  = @('Get-ObjectHelp','Get-NetHelp','Get-CimHelp')
     VariablesToExport  = @()
-    AliasesToExport    = @()
+    AliasesToExport    = @('ohelp')
     # DscResourcesToExport = @()
     # DefaultCommandPrefix = ''
 
