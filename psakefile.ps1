@@ -1,9 +1,10 @@
 Properties {
-    $OutputDirectory = "$PSScriptRoot/Build"
     $SrcDirectory = "$PSScriptRoot/Src"
+    $OutputDirectory = "$PSScriptRoot/Build"
+    $DeployDirectory = "$HOME/Documents/WindowsPowerShell/Modules/ObjectHelp"
 }
 
-Task 'default' -Depends clean, build
+Task 'default' -Depends build
 
 Task 'clean' {
     if (Test-Path $OutputDirectory) {
@@ -11,7 +12,7 @@ Task 'clean' {
     }
 }
 
-Task 'build' {
+Task 'build' -Depends clean {
     New-Item $OutputDirectory -ItemType Directory -ErrorAction SilentlyContinue > $null
 
     ## Copy manifest
@@ -23,4 +24,17 @@ Task 'build' {
         $ModuleContent += Get-Content $script.FullName
     }
     Set-Content "$OutputDirectory/ObjectHelp.psm1" -Value $ModuleContent -Encoding UTF8 -Force
+
+    ## Copy format files
+    Copy-Item "$SrcDirectory/Format/*.ps1xml" -Destination $OutputDirectory -Force
+}
+
+Task 'deploy' -Depends build {
+    if (Test-Path $DeployDirectory) {
+        Remove-Item $DeployDirectory -Recurse -Force
+    }
+
+    New-Item $DeployDirectory -ItemType Directory -ErrorAction SilentlyContinue > $null
+
+    Copy-Item "$OutputDirectory/*" -Destination $DeployDirectory -Force
 }
