@@ -1,22 +1,22 @@
 @{
     ## Module Info
     ModuleVersion      = '0.3.0'
-    Description        = "Extends Get-Help to display usage and summary help for COM, CIM (WMI) and .NET types."
+    Description        = 'Extends Get-Help to display usage and summary help for COM, CIM (WMI) and .NET types.'
     GUID               = '64a3d770-e369-4060-baac-6873bf74d1d7'
     # HelpInfoURI        = ''
 
     ## Module Components
-    RootModule         = @("ObjectHelp.psm1")
+    RootModule         = @('ObjectHelp.psm1')
     ScriptsToProcess   = @()
     TypesToProcess     = @()
-    FormatsToProcess   = @("CimHelp/CimHelp.Format.ps1xml","DotNetHelp/NetHelp.Format.ps1xml")
+    FormatsToProcess   = @('CimHelp.Format.ps1xml','NetHelp.Format.ps1xml')
     FileList           = @()
 
     ## Public Interface
     CmdletsToExport    = ''
-    FunctionsToExport  = @("*")
+    FunctionsToExport  = @('Get-ObjectHelp','Get-NetHelp','Get-CimHelp')
     VariablesToExport  = @()
-    AliasesToExport    = @("*")
+    AliasesToExport    = @()
     # DscResourcesToExport = @()
     # DefaultCommandPrefix = ''
 
