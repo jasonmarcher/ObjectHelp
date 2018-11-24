@@ -1,61 +1,58 @@
-function Search-WmiHelp(
-        [ScriptBlock]$descriptionExpression={},
-
-        [ScriptBlock]$methodExpression={}, 
-        [ScriptBlock]$propertyExpression={},
-	$namespaces="root\cimv2",
-        $cultureID = (Get-Culture).LCID,
-        [switch]$list
-)
-{    
+function Search-WmiHelp {
+    param(
+        [ScriptBlock]$DescriptionExpression = {}
+        ,
+        [ScriptBlock]$MethodExpression = {}
+        , 
+        [ScriptBlock]$PropertyExpression = {}
+        ,
+        $Namespaces = "root\cimv2"
+        ,
+        $CultureID = (Get-Culture).LCID
+        ,
+        [switch]$List
+    )
 
     $resultWmiClasses = @{}
    
-    foreach ($namespace in $namespaces)
-    {
+    foreach ($namespace in $Namespaces) {
         #First, get a list of all localized namespaces under the current namespace
 	
         $localizedNamespace = Get-LocalizedNamespace $namespace
-        if ($localizedNamespace -eq $null)
-        {
+        if ($localizedNamespace -eq $null) {
     	    Write-Verbose "Could not get a list of localized namespaces"
             return
-	}
+	    }
 
         $localizedClasses = Get-WmiObject -NameSpace $localizedNamespace -Query "select * from meta_class"
-        $count = 0;
-        foreach ($WmiClass in $localizedClasses)
-        {
+        $count = 0
+        foreach ($WmiClass in $localizedClasses) {
             $count++
-            Write-Progress "Searching Wmi Classes" "$count of $($localizedClasses.Count)" -Perc ($count*100/$localizedClasses.Count)
+            Write-Progress "Searching Wmi Classes" "$count of $($localizedClasses.Count)" -PercentComplete ($count*100/$localizedClasses.Count)
             $classLocation= $localizedNamespace + ':' + $WmiClass.__Class
             $classInfo = Get-WmiClassInfo $classLocation
             [bool]$found = $false
-            if ($classInfo -ne $null)
-            {
-                if (! $resultWmiClasses.ContainsKey($classLocation))
-                {
+            if ($classInfo -ne $null) {
+                if (! $resultWmiClasses.ContainsKey($classLocation)) {
                     $resultWmiClasses.Add($wmiClass.__Class, $classInfo)
                 }
 
-                $descriptionMatch = [bool]($classInfo.Description | where $descriptionExpression)
-                $methodMatch = [bool]($classInfo.Methods.GetEnumerator() | where $methodExpression)
-                $propertyMatch = [bool]($classInfo.Properties.GetEnumerator() | where $propertyExpression)
+                $descriptionMatch = [bool]($classInfo.Description | Where-Object $DescriptionExpression)
+                $methodMatch = [bool]($classInfo.Methods.GetEnumerator() | Where-Object $MethodExpression)
+                $propertyMatch = [bool]($classInfo.Properties.GetEnumerator() | Where-Object $PropertyExpression)
 
                 $found = $descriptionMatch -or $methodMatch -or $propertyMatch
                 
-                if (! $found)
-                {
+                if (! $found) {
                     $resultWmiClasses.Remove($WmiClass.__Class)
                 }
             }
       	}      	    
     }
 
-    if ($list)
-    {
-        $resultWmiClasses.Keys | sort
+    if ($List) {
+        $resultWmiClasses.Keys | Sort-Object
     } else {
-        $resultWmiClasses.GetEnumerator() | sort Key
+        $resultWmiClasses.GetEnumerator() | Sort-Object Key
     }
 }
