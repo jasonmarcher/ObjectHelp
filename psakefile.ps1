@@ -1,6 +1,7 @@
 Properties {
     $SrcDirectory = "$PSScriptRoot/Src"
     $OutputDirectory = "$PSScriptRoot/Build"
+    $ReportDirectory = "$PSSCriptRoot/Reports"
     $DeployDirectory = "$HOME/Documents/WindowsPowerShell/Modules/ObjectHelp"
 }
 
@@ -37,4 +38,15 @@ Task 'deploy' -Depends build {
     New-Item $DeployDirectory -ItemType Directory -ErrorAction SilentlyContinue > $null
 
     Copy-Item "$OutputDirectory/*" -Destination $DeployDirectory -Force
+}
+
+Task 'checkStyle' -Depends build {
+    New-Item $ReportDirectory -ItemType Directory -ErrorAction SilentlyContinue > $null
+
+    $FilesToCheck = Get-ChildItem $SrcDirectory -Include *.ps1 -Recurse
+    $FilesToCheck += Get-ChildItem $OutputDirectory -Include *.psd1 -Recurse
+
+    $Results = $FilesToCheck | ForEach-Object {Invoke-ScriptAnalyzer $_.FullName}
+    $Results | Where-Object Severity -eq "Error" | Format-Table | Out-String | Write-Host -ForegroundColor Red
+    $Results | Select-Object RuleName,Severity,Line,Column,ScriptName,Message | ConvertTo-Csv -NoTypeInformation | Set-Content "$ReportDirectory/checkstyle.csv" -Force
 }

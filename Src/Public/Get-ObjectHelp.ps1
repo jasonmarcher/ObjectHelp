@@ -25,7 +25,7 @@ function Get-ObjectHelp {
     process {
         $Type = $null
         $TypeName = $null
-        $Selector = $null
+        # $Selector = $null
 
         Write-Verbose "Start processing..."
         Write-Verbose ("Input object (Type:" + $Object.GetType() + ", IsType:" + ($Object -is [System.Type]) + ")")
@@ -100,7 +100,7 @@ function Get-ObjectHelp {
                     $Page = $TypeName
                 }
                 $Uri = "https://docs.microsoft.com/$Culture/windows/desktop/CIMWin32Prov/$Page"
-                [System.Diagnostics.Process]::Start($uri) > $null
+                [System.Diagnostics.Process]::Start($uri) | Out-Null
             } else {
                 if ($Method) {
                     Get-CimHelp -Class $Type.CimClassName -Namespace $Type.CimSystemProperties.Namespace -Method $Method
@@ -113,7 +113,7 @@ function Get-ObjectHelp {
         } elseif ($Type -is [System.Type]) {
             if ($Online) {
                 if ($Uri = Get-HelpUri $Type) {
-                    [System.Diagnostics.Process]::Start($Uri.ToString()) > $null
+                    [System.Diagnostics.Process]::Start($Uri.ToString()) | Out-Null
                 }
             } else {
                 if ($Method) {
@@ -137,7 +137,7 @@ function Get-ObjectHelp {
                     }
                 }
                 $Uri = "http://social.msdn.microsoft.com/Search/$Culture/?query=$TypeName"
-                [System.Diagnostics.Process]::Start($uri) > $null
+                [System.Diagnostics.Process]::Start($uri) | Out-Null
             } else {
                 Write-Error "Unable to find local help."
                 return

@@ -6,11 +6,9 @@ function Get-LocalizedNamespace {
     )
 
     #First, get a list of all localized namespaces under the current namespace
-    $localizedNamespaces = Get-WmiObject -NameSpace $NameSpace -Class "__Namespace" | where {$_.Name -like "ms_*"}
-    if ($localizedNamespaces -eq $null)
-    {
-        if (-not $quiet)
-        {
+    $localizedNamespaces = Get-WmiObject -NameSpace $NameSpace -Class "__Namespace" | Where-Object {$_.Name -like "ms_*"}
+    if ($null -eq $localizedNamespaces) {
+        if (-not $quiet) {
             Write-Warning "Could not get a  list of localized namespaces"
         }
         return

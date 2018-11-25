@@ -31,7 +31,7 @@ function Get-NetHelp {
         if ($Help) {
             $Help #| Format-AssemblyHelp
         } else {
-            Write-Host "While some local documentation was found, it was incomplete."
+            Write-Warning "While some local documentation was found, it was incomplete."
         }
     } else {
         $HelpObject = New-Object PSObject -Property @{
