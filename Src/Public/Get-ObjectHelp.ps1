@@ -112,7 +112,14 @@ function Get-ObjectHelp {
             }
         } elseif ($Type -is [System.Type]) {
             if ($Online) {
-                if ($Uri = Get-HelpUri $Type) {
+                $Member = if ($Method) {
+                        $Method
+                    } elseif ($Property) {
+                        $Property
+                    } else {
+                        $null
+                    }
+                if ($Uri = Get-HelpUri $Type -Member $Member) {
                     [System.Diagnostics.Process]::Start($Uri.ToString()) | Out-Null
                 }
             } else {
@@ -139,7 +146,7 @@ function Get-ObjectHelp {
                 $Uri = "http://social.msdn.microsoft.com/Search/$Culture/?query=$TypeName"
                 [System.Diagnostics.Process]::Start($uri) | Out-Null
             } else {
-                Write-Error "Unable to find local help."
+                Write-Error "Local help not supported for COM objects."
                 return
             }
         }
