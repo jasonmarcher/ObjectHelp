@@ -1,7 +1,7 @@
 @{
     ## Module Info
-    ModuleVersion      = '0.3.0'
-    Description        = 'Extends Get-Help to display usage and summary help for COM, CIM (WMI) and .NET types.'
+    ModuleVersion      = '0.4.0'
+    Description        = 'Provides help in the console for COM, CIM (WMI) and .NET types.'
     GUID               = '64a3d770-e369-4060-baac-6873bf74d1d7'
     # HelpInfoURI        = ''
 
@@ -32,7 +32,7 @@
     CLRVersion             = '2.0'
 
     ## Author
-    Author             = 'Oisin Grehan'
+    Author             = 'Oisin Grehan, Jason Archer'
     CompanyName        = ''
     Copyright          = ''
 
@@ -53,6 +53,12 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = @"
+## 2018-12-01 - Version 0.4.0
+
+Features:
+
+- Console formatted help for .NET and CIM objects
+- Links to online help for Microsoft .NET and CIM objects
 "@
         } # End of PSData hashtable
     } # End of PrivateData hashtable
