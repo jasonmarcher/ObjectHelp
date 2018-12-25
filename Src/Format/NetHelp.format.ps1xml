@@ -3,86 +3,86 @@
   <Controls>
     <Control>
       <Name>NetNameSectionControl</Name>
-        <CustomControl>
-          <CustomEntries>
-            <CustomEntry>
-              <EntrySelectedBy>
-                <TypeName>ObjectHelpInfo#Details</TypeName>
-              </EntrySelectedBy>
-              <CustomItem>
-                <Text AssemblyName="System.Management.Automation" BaseName="HelpDisplayStrings" ResourceId="Name"/>
-                <NewLine/>
-                <Frame>
-                  <LeftIndent>4</LeftIndent>
-                  <CustomItem>
-                    <ExpressionBinding>
-                      <PropertyName>Name</PropertyName>
-                    </ExpressionBinding>
-                    <Text> Class</Text>
-                    <NewLine/>
-                    <NewLine/>
-                  </CustomItem>
-                </Frame>
-              </CustomItem>
-            </CustomEntry>
-            <CustomEntry>
-              <EntrySelectedBy>
-                <TypeName>ObjectHelpInfo#Net#Property</TypeName>
-              </EntrySelectedBy>
-              <CustomItem>
-                <Text AssemblyName="System.Management.Automation" BaseName="HelpDisplayStrings" ResourceId="Name"/>
-                <NewLine/>
-                <Frame>
-                  <LeftIndent>4</LeftIndent>
-                  <CustomItem>
-                    <ExpressionBinding>
-                      <PropertyName>Name</PropertyName>
-                    </ExpressionBinding>
-                    <Text> Property</Text>
-                    <NewLine/>
-                    <NewLine/>
-                  </CustomItem>
-                </Frame>
-              </CustomItem>
-            </CustomEntry>
-            <CustomEntry>
-              <EntrySelectedBy>
-                <TypeName>ObjectHelpInfo#Net#Method</TypeName>
-              </EntrySelectedBy>
-              <CustomItem>
-                <Text AssemblyName="System.Management.Automation" BaseName="HelpDisplayStrings" ResourceId="Name"/>
-                <NewLine/>
-                <Frame>
-                  <LeftIndent>4</LeftIndent>
-                  <CustomItem>
-                    <ExpressionBinding>
-                      <PropertyName>Name</PropertyName>
-                    </ExpressionBinding>
-                    <Text> Method</Text>
-                    <NewLine/>
-                    <NewLine/>
-                  </CustomItem>
-                </Frame>
-              </CustomItem>
-            </CustomEntry>
-            <CustomEntry>
-              <CustomItem>
-                <Text AssemblyName="System.Management.Automation" BaseName="HelpDisplayStrings" ResourceId="Name"/>
-                <NewLine/>
-                <Frame>
-                  <LeftIndent>4</LeftIndent>
-                  <CustomItem>
-                    <ExpressionBinding>
-                      <PropertyName>Name</PropertyName>
-                    </ExpressionBinding>
-                    <NewLine/>
-                    <NewLine/>
-                  </CustomItem>
-                </Frame>
-              </CustomItem>
-            </CustomEntry>
-          </CustomEntries>
-        </CustomControl>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <EntrySelectedBy>
+              <TypeName>ObjectHelpInfo#Details</TypeName>
+            </EntrySelectedBy>
+            <CustomItem>
+              <Text AssemblyName="System.Management.Automation" BaseName="HelpDisplayStrings" ResourceId="Name"/>
+              <NewLine/>
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Name</PropertyName>
+                  </ExpressionBinding>
+                  <Text> Class</Text>
+                  <NewLine/>
+                  <NewLine/>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+          <CustomEntry>
+            <EntrySelectedBy>
+              <TypeName>ObjectHelpInfo#Net#Property</TypeName>
+            </EntrySelectedBy>
+            <CustomItem>
+              <Text AssemblyName="System.Management.Automation" BaseName="HelpDisplayStrings" ResourceId="Name"/>
+              <NewLine/>
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Name</PropertyName>
+                  </ExpressionBinding>
+                  <Text> Property</Text>
+                  <NewLine/>
+                  <NewLine/>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+          <CustomEntry>
+            <EntrySelectedBy>
+              <TypeName>ObjectHelpInfo#Net#Method</TypeName>
+            </EntrySelectedBy>
+            <CustomItem>
+              <Text AssemblyName="System.Management.Automation" BaseName="HelpDisplayStrings" ResourceId="Name"/>
+              <NewLine/>
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Name</PropertyName>
+                  </ExpressionBinding>
+                  <Text> Method</Text>
+                  <NewLine/>
+                  <NewLine/>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+          <CustomEntry>
+            <CustomItem>
+              <Text AssemblyName="System.Management.Automation" BaseName="HelpDisplayStrings" ResourceId="Name"/>
+              <NewLine/>
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Name</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine/>
+                  <NewLine/>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
     </Control>
     <Control>
       <Name>NetSynopsisSectionControl</Name>
@@ -109,42 +109,42 @@
     </Control>
     <Control>
       <Name>NetClassSectionControl</Name>
-        <CustomControl>
-          <CustomEntries>
-            <CustomEntry>
-              <CustomItem>
-                <Text>CLASS</Text>
-                <NewLine/>
-                <Frame>
-                  <LeftIndent>4</LeftIndent>
-                  <CustomItem>
-                    <ExpressionBinding>
-                      <PropertyName>Namespace</PropertyName>
-                    </ExpressionBinding>
-                    <Text>.</Text>
-                    <ExpressionBinding>
-                      <PropertyName>Name</PropertyName>
-                    </ExpressionBinding>
-                    <NewLine/>
-                    <NewLine/>
-                  </CustomItem>
-                </Frame>
-                <Text>SUPERCLASS</Text>
-                <NewLine/>
-                <Frame>
-                  <LeftIndent>4</LeftIndent>
-                  <CustomItem>
-                    <ExpressionBinding>
-                      <PropertyName>SuperClass</PropertyName>
-                    </ExpressionBinding>
-                    <NewLine/>
-                    <NewLine/>
-                  </CustomItem>
-                </Frame>
-              </CustomItem>
-            </CustomEntry>
-          </CustomEntries>
-        </CustomControl>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text>CLASS</Text>
+              <NewLine/>
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Namespace</PropertyName>
+                  </ExpressionBinding>
+                  <Text>.</Text>
+                  <ExpressionBinding>
+                    <PropertyName>Name</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine/>
+                  <NewLine/>
+                </CustomItem>
+              </Frame>
+              <Text>SUPERCLASS</Text>
+              <NewLine/>
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>SuperClass</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine/>
+                  <NewLine/>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
     </Control>
     <Control>
       <Name>NetIndentedDescriptionSectionControl</Name>
