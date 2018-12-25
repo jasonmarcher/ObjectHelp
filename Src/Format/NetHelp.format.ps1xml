@@ -85,6 +85,29 @@
         </CustomControl>
     </Control>
     <Control>
+      <Name>NetSynopsisSectionControl</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text AssemblyName="System.Management.Automation" BaseName="HelpDisplayStrings" ResourceId="Synopsis"/>
+              <NewLine/>
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <ScriptBlock>$_</ScriptBlock>
+                  </ExpressionBinding>
+                  <NewLine/>
+                  <NewLine/>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+    <Control>
       <Name>NetClassSectionControl</Name>
         <CustomControl>
           <CustomEntries>
@@ -409,6 +432,10 @@
                 <CustomControlName>NetNameSectionControl</CustomControlName>
               </ExpressionBinding>
               <ExpressionBinding>
+                <ScriptBlock>$_.Details.Summary</ScriptBlock>
+                <CustomControlName>NetSynopsisSectionControl</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
                 <PropertyName>Details</PropertyName>
                 <CustomControlName>NetClassSectionControl</CustomControlName>
               </ExpressionBinding>
@@ -444,6 +471,10 @@
               <ExpressionBinding>
                 <PropertyName>Details</PropertyName>
                 <CustomControlName>NetNameSectionControl</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
+                <ScriptBlock>$_.Details.Summary</ScriptBlock>
+                <CustomControlName>NetSynopsisSectionControl</CustomControlName>
               </ExpressionBinding>
               <ExpressionBinding>
                 <PropertyName>Details</PropertyName>
@@ -486,6 +517,10 @@
                 <ScriptBlock>$_</ScriptBlock>
                 <CustomControlName>NetNameSectionControl</CustomControlName>
               </ExpressionBinding>
+              <ExpressionBinding>
+                <ScriptBlock>$_.Summary</ScriptBlock>
+                <CustomControlName>NetSynopsisSectionControl</CustomControlName>
+              </ExpressionBinding>
               <Text>TYPE</Text>
               <NewLine/>
               <Frame>
@@ -520,6 +555,10 @@
               <ExpressionBinding>
                 <ScriptBlock>$_</ScriptBlock>
                 <CustomControlName>NetNameSectionControl</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
+                <ScriptBlock>$_.Summary</ScriptBlock>
+                <CustomControlName>NetSynopsisSectionControl</CustomControlName>
               </ExpressionBinding>
               <ExpressionBinding>
                 <ScriptBlock>$_</ScriptBlock>

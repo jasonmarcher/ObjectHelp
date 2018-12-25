@@ -35,6 +35,7 @@ function Get-NetHelp {
     #     }
     # }
 
+    $HelpUrl = Get-HelpUri $Type
     $HelpObject = New-Object PSObject -Property @{
         Details = New-Object PSObject -Property @{
             Name = $Type.Name
@@ -45,7 +46,7 @@ function Get-NetHelp {
         Constructors = @()
         Methods = @{}
         RelatedLinks = @(
-            New-Object PSObject -Property @{Title="Online Version"; Link = Get-HelpUri $Type}
+            New-Object PSObject -Property @{Title = "Online Version"; Link = $HelpUrl}
         )
     }
     $HelpObject.Details.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Details")
@@ -110,6 +111,7 @@ function Get-NetHelp {
         $HelpObject.Methods.Add($NetMethod.Name, $MethodObject)
     }
 
+    $DownloadOnlineHelp = $true
     if ($Property) {
         $PropertyObject = $HelpObject.Properties[$Property]
 
@@ -118,6 +120,14 @@ function Get-NetHelp {
             Add-Member -InputObject $PropertyObject -Name Namespace -Value $HelpObject.Details.Namespace -MemberType NoteProperty
             Add-Member -InputObject $PropertyObject -Name SuperClass -Value $HelpObject.Details.SuperClass -MemberType NoteProperty
             $PropertyObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#PropertyDetail")
+
+            if ($DownloadOnlineHelp) {
+                $OnlineHelp = Import-OnlineHelp (Get-HelpUri $Type -Member $Property)
+                if ($OnlineHelp) {
+                    Add-Member -InputObject $PropertyObject -Name Summary -Value $OnlineHelp.Summary -MemberType NoteProperty
+                }
+            }
+
             return $PropertyObject
         } else {
             throw "Property named '$Property' not found."
@@ -131,11 +141,24 @@ function Get-NetHelp {
             Add-Member -InputObject $MethodObject -Name SuperClass -Value $HelpObject.Details.SuperClass -MemberType NoteProperty
             $MethodObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#MethodDetail")
 
+            if ($DownloadOnlineHelp) {
+                $OnlineHelp = Import-OnlineHelp (Get-HelpUri $Type -Member $Method)
+                if ($OnlineHelp) {
+                    Add-Member -InputObject $MethodObject -Name Summary -Value $OnlineHelp.Summary -MemberType NoteProperty
+                }
+            }
+
             return $MethodObject
         } else {
             throw "Method named '$Method' not found."
         }
     } else {
+        if ($DownloadOnlineHelp) {
+            $OnlineHelp = Import-OnlineHelp $HelpUrl
+            if ($OnlineHelp) {
+                Add-Member -InputObject $HelpObject.Details -Name Summary -Value $OnlineHelp.Summary -MemberType NoteProperty
+            }
+        }
         return $HelpObject
     }
 }
