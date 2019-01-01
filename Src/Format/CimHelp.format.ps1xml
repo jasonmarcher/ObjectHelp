@@ -310,6 +310,53 @@
         </CustomEntries>
       </CustomControl>
     </Control>
+    <Control>
+      <Name>CimRelatedSectionControl</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text AssemblyName="System.Management.Automation" BaseName="HelpDisplayStrings" ResourceId="RelatedLinks"/>
+              <NewLine/>
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>RelatedLinks</PropertyName>
+                    <EnumerateCollection/>
+                    <CustomControlName>CimRelatedLinksControl</CustomControlName>
+                  </ExpressionBinding>
+                  <NewLine/>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+    <Control>
+      <Name>CimRelatedLinksControl</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Frame>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Title</PropertyName>
+                  </ExpressionBinding>
+                  <Text>: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>Link</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine/>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
   </Controls>
   <!-- ################ VIEW DEFINITIONS ################ -->
   <ViewDefinitions>
@@ -334,6 +381,10 @@
               <ExpressionBinding>
                 <PropertyName>Details</PropertyName>
                 <CustomControlName>CimIndentedDescriptionSectionControl</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>CimRelatedSectionControl</CustomControlName>
               </ExpressionBinding>
             </CustomItem>
           </CustomEntry>
@@ -380,6 +431,10 @@
                 <EnumerateCollection/>
                 <CustomControlName>CimMethodSyntaxItemControl</CustomControlName>
               </ExpressionBinding>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>CimRelatedSectionControl</CustomControlName>
+              </ExpressionBinding>
             </CustomItem>
           </CustomEntry>
         </CustomEntries>
@@ -418,6 +473,10 @@
               <ExpressionBinding>
                 <ScriptBlock>$_</ScriptBlock>
                 <CustomControlName>CimIndentedDescriptionSectionControl</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>CimRelatedSectionControl</CustomControlName>
               </ExpressionBinding>
             </CustomItem>
           </CustomEntry>
@@ -462,6 +521,10 @@
                   </ExpressionBinding>
                 </CustomItem>
               </Frame>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>CimRelatedSectionControl</CustomControlName>
+              </ExpressionBinding>
             </CustomItem>
           </CustomEntry>
         </CustomEntries>

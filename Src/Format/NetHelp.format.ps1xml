@@ -414,6 +414,53 @@
         </CustomEntries>
       </CustomControl>
     </Control>
+    <Control>
+      <Name>NetRelatedSectionControl</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text AssemblyName="System.Management.Automation" BaseName="HelpDisplayStrings" ResourceId="RelatedLinks"/>
+              <NewLine/>
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>RelatedLinks</PropertyName>
+                    <EnumerateCollection/>
+                    <CustomControlName>NetRelatedLinksControl</CustomControlName>
+                  </ExpressionBinding>
+                  <NewLine/>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+    <Control>
+      <Name>NetRelatedLinksControl</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Frame>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Title</PropertyName>
+                  </ExpressionBinding>
+                  <Text>: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>Link</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine/>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
   </Controls>
   <!-- ################ VIEW DEFINITIONS ################ -->
   <ViewDefinitions>
@@ -452,6 +499,10 @@
                 <ScriptBlock>$_.Methods.Values | Sort-Object Name</ScriptBlock>
                 <EnumerateCollection/>
                 <CustomControlName>NetMethodListItemControl</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>NetRelatedSectionControl</CustomControlName>
               </ExpressionBinding>
             </CustomItem>
           </CustomEntry>
@@ -498,6 +549,10 @@
                 <EnumerateCollection/>
                 <CustomControlName>NetMethodListItemControl</CustomControlName>
               </ExpressionBinding>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>NetRelatedSectionControl</CustomControlName>
+              </ExpressionBinding>
             </CustomItem>
           </CustomEntry>
         </CustomEntries>
@@ -537,6 +592,10 @@
                 <ScriptBlock>$_</ScriptBlock>
                 <CustomControlName>NetClassSectionControl</CustomControlName>
               </ExpressionBinding>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>NetRelatedSectionControl</CustomControlName>
+              </ExpressionBinding>
             </CustomItem>
           </CustomEntry>
         </CustomEntries>
@@ -567,6 +626,10 @@
               <ExpressionBinding>
                 <ScriptBlock>$_</ScriptBlock>
                 <CustomControlName>NetSyntaxSectionControl</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>NetRelatedSectionControl</CustomControlName>
               </ExpressionBinding>
             </CustomItem>
           </CustomEntry>

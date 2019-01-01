@@ -90,17 +90,9 @@ function Get-ObjectHelp {
 
         if ($Type -is [Microsoft.Management.Infrastructure.CimClass]) {
             if ($Online) {
-                $TypeName = $Type.CimClassName -replace "_","-"
-                if ($Method) {
-                    # $Page = "$TypeName#methods"
-                    $Page = "$Method-method-in-class-$TypeName"
-                } elseif ($Property) {
-                    $Page = "$TypeName#properties"
-                } else {
-                    $Page = $TypeName
+                if ($Uri = Get-CimUri -Type $Type -Method $Method -Property $Property) {
+                    [System.Diagnostics.Process]::Start($Uri.ToString()) | Out-Null
                 }
-                $Uri = "https://docs.microsoft.com/$Culture/windows/desktop/CIMWin32Prov/$Page"
-                [System.Diagnostics.Process]::Start($uri) | Out-Null
             } else {
                 if ($Method) {
                     Get-CimHelp -Class $Type.CimClassName -Namespace $Type.CimSystemProperties.Namespace -Method $Method

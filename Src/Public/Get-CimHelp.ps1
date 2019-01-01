@@ -17,6 +17,8 @@ function Get-CimHelp {
         [string]$Method
     )
 
+    $HelpUrl = Get-CimUri -Type $Type -Method $Method -Property $Property
+
     $CimClass = Get-CimClass $Class -Namespace $Namespace
     $LocalizedClass = Get-WmiClassInfo $Class -Namespace $Namespace
 
@@ -33,6 +35,9 @@ function Get-CimHelp {
         }
         Properties = @{}
         Methods = @{}
+        RelatedLinks = @(
+            New-Object PSObject -Property @{Title = "Online Version"; Link = $HelpUrl}
+        )
     }
     $HelpObject.Details.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Details")
     $HelpObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo")
@@ -50,6 +55,9 @@ function Get-CimHelp {
                 $Paragraph.PSObject.TypeNames.Insert(0, "CimParaTextItem")
                 $Paragraph
             })
+            RelatedLinks = @(
+                New-Object PSObject -Property @{Title = "Online Version"; Link = $HelpUrl}
+            )
         }
         $PropertyObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Cim#Property")
         $HelpObject.Properties.Add($CimProperty.Name, $PropertyObject)
@@ -64,6 +72,9 @@ function Get-CimHelp {
             Constructor = $CimMethod.Qualifiers["Constructor"].Value
             Description = $null
             Parameters = @{}
+            RelatedLinks = @(
+                New-Object PSObject -Property @{Title = "Online Version"; Link = $HelpUrl}
+            )
         }
         $MethodObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Cim#Method")
 

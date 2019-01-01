@@ -116,13 +116,15 @@ function Get-NetHelp {
         $PropertyObject = $HelpObject.Properties[$Property]
 
         if ($PropertyObject) {
+            $PropertyHelpUrl = Get-HelpUri $Type -Member $Property
             Add-Member -InputObject $PropertyObject -Name Class -Value $HelpObject.Details.Name -MemberType NoteProperty
             Add-Member -InputObject $PropertyObject -Name Namespace -Value $HelpObject.Details.Namespace -MemberType NoteProperty
             Add-Member -InputObject $PropertyObject -Name SuperClass -Value $HelpObject.Details.SuperClass -MemberType NoteProperty
+            Add-Member -InputObject $PropertyObject -Name RelatedLinks -Value @(New-Object PSObject -Property @{Title = "Online Version"; Link = $PropertyHelpUrl}) -MemberType NoteProperty
             $PropertyObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#PropertyDetail")
 
             if ($DownloadOnlineHelp) {
-                $OnlineHelp = Import-OnlineHelp (Get-HelpUri $Type -Member $Property)
+                $OnlineHelp = Import-OnlineHelp $PropertyHelpUrl
                 if ($OnlineHelp) {
                     Add-Member -InputObject $PropertyObject -Name Summary -Value $OnlineHelp.Summary -MemberType NoteProperty
                 }
@@ -136,13 +138,15 @@ function Get-NetHelp {
         $MethodObject = $HelpObject.Methods[$Method]
 
         if ($MethodObject) {
+            $MethodHelpUrl = Get-HelpUri $Type -Member $Method
             Add-Member -InputObject $MethodObject -Name Class -Value $HelpObject.Details.Name -MemberType NoteProperty
             Add-Member -InputObject $MethodObject -Name Namespace -Value $HelpObject.Details.Namespace -MemberType NoteProperty
             Add-Member -InputObject $MethodObject -Name SuperClass -Value $HelpObject.Details.SuperClass -MemberType NoteProperty
+            Add-Member -InputObject $MethodObject -Name RelatedLinks -Value @(New-Object PSObject -Property @{Title = "Online Version"; Link = $MethodHelpUrl}) -MemberType NoteProperty
             $MethodObject.PSObject.TypeNames.Insert(0, "ObjectHelpInfo#Net#MethodDetail")
 
             if ($DownloadOnlineHelp) {
-                $OnlineHelp = Import-OnlineHelp (Get-HelpUri $Type -Member $Method)
+                $OnlineHelp = Import-OnlineHelp $MethodHelpUrl
                 if ($OnlineHelp) {
                     Add-Member -InputObject $MethodObject -Name Summary -Value $OnlineHelp.Summary -MemberType NoteProperty
                 }
